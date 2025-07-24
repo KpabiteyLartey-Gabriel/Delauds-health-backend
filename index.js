@@ -1,17 +1,20 @@
 require('dotenv').config();
+console.log('CORS_ORIGIN:', process.env.CORS_ORIGIN);
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
 
-const allowedOrigins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(",") : [];
-const corsOptions = {
-  origin: allowedOrigins,
-  credentials: true
-};
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://delauds-health.vercel.app");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
