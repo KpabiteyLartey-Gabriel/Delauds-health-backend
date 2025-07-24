@@ -6,10 +6,12 @@ const cors = require('cors');
 const app = express();
 
 const allowedOrigins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(",") : [];
-app.use(cors({
+const corsOptions = {
   origin: allowedOrigins,
   credentials: true
-}));
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
