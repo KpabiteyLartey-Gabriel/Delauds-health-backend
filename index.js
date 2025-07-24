@@ -17,6 +17,13 @@ app.use((req, res, next) => {
 });
 app.use(express.json());
 
+const corsOptions = {
+  origin: 'https://delauds-health.vercel.app',
+  credentials: true
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
+
 const PORT = process.env.PORT || 5000;
 
 mongoose.connect(process.env.MONGO_URI, {
