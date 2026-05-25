@@ -1,9 +1,20 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const Admin = require('../models/Admin');
+
+const AdminSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+});
+
+const Admin = mongoose.models.Admin || mongoose.model('Admin', AdminSchema);
 
 async function createAdmin() {
+  if (!process.env.MONGO_URI) {
+    console.error('MONGO_URI must be set in .env');
+    process.exit(1);
+  }
+
   await mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
